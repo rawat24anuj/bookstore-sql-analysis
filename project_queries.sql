@@ -59,3 +59,13 @@ SELECT b.Author, SUM(o.Quantity) AS Books_Sold
 FROM Orders o
 JOIN Books b ON o.Book_ID = b.Book_ID
 GROUP BY b.Author;
+
+-- 10. Calculate the stock remaining after fulfilling all orders
+SELECT b.book_id, b.title, b.stock, 
+       COALESCE(SUM(o.quantity), 0) AS order_quantity,  
+       b.stock - COALESCE(SUM(o.quantity), 0) AS remaining_quantity
+FROM books b
+LEFT JOIN orders o ON b.book_id = o.book_id
+GROUP BY b.book_id 
+ORDER BY b.book_id;
+
